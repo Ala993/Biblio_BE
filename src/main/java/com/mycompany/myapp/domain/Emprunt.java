@@ -31,6 +31,7 @@ public class Emprunt implements Serializable {
 
     @DBRef
     @Field("livre")
+    @JsonIgnoreProperties(value = "emprunt")
     private Livre livre;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -7,7 +7,9 @@ import com.mycompany.myapp.repository.EmpruntRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +53,9 @@ public class EmpruntService {
         student.setEmprunts(empruntList);
         studentService.save(student);
         Livre livre = livreService.findOne(emprunt.getLivre().getId()).get();
-
+        livre.setEmprunt(savedEmprunt);
+        livre.setBorrowed(true);
+        livreService.save(livre);
         return savedEmprunt;
     }
 
@@ -108,6 +112,22 @@ public class EmpruntService {
      */
     public void delete(String id) {
         log.debug("Request to delete Emprunt : {}", id);
+        Emprunt emprunt = empruntRepository.findById(id).orElseThrow();
+        Student student = studentService.findOne(emprunt.getStudent().getId()).orElseThrow();
+        List<Emprunt> empruntList = student.getEmprunts();
+        student.setEmprunts(empruntList.stream().filter(emprunt1 -> !emprunt1.getId().equals(id) ).collect(Collectors.toList()));
+        studentService.save(student);
+        Livre livre = livreService.findOne(emprunt.getLivre().getId()).orElseThrow();
+        livre.setEmprunt(null);
+        livre.isBorrowed(false);
+        livreService.save(livre);
         empruntRepository.deleteById(id);
+    }
+    public List<Emprunt> findAllByCriteria(String livre){
+        List<Emprunt> empruntList = empruntRepository.findAll();
+        empruntList = empruntList.stream().filter(emprunt ->
+            emprunt.getLivre().getName().toLowerCase().contains(livre.toLowerCase()))
+            .collect(Collectors.toList());
+        return empruntList;
     }
 }

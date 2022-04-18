@@ -39,8 +39,23 @@ public class Livre implements Serializable {
     @Field("emprunt")
     private Emprunt emprunt;
 
+    public Boolean getBorrowed() {
+        return isBorrowed;
+    }
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    public void setBorrowed(Boolean borrowed) {
+        isBorrowed = borrowed;
+    }
+
+    public Emprunt getEmprunt() {
+        return emprunt;
+    }
+
+    public void setEmprunt(Emprunt emprunt) {
+        this.emprunt = emprunt;
+    }
+
+// jhipster-needle-entity-add-field - JHipster will add fields here
 
     public String getId() {
         return this.id;

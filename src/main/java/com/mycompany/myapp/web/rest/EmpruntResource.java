@@ -175,4 +175,10 @@ public class EmpruntResource {
         empruntService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
     }
+    @GetMapping("/emprunts-by-criteria/{livre}")
+    public ResponseEntity<List<Emprunt>> getAllEmprunts(@PathVariable String livre) {
+        log.debug("REST request to get a list of Emprunts by criteria");
+        List<Emprunt> page = empruntService.findAllByCriteria(livre);
+        return ResponseEntity.ok().body(page);
+    }
 }
