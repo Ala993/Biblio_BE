@@ -1,0 +1,36 @@
+{
+  "changelogDate": "20220417215010",
+  "dto": "no",
+  "fields": [
+    {
+      "fieldName": "start",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "end",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "Emprunt",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "student",
+      "otherEntityRelationshipName": "emprunt",
+      "ownerSide": true,
+      "relationshipName": "student",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "livre",
+      "otherEntityRelationshipName": "emprunt",
+      "ownerSide": true,
+      "relationshipName": "livre",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

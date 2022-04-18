@@ -1,0 +1,30 @@
+{
+  "changelogDate": "20220417214620",
+  "dto": "no",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "author",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isBorrowed",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "Livre",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "category",
+      "relationshipName": "category",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

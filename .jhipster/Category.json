@@ -1,0 +1,15 @@
+{
+  "changelogDate": "20220417214357",
+  "dto": "no",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Category",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

@@ -1,0 +1,27 @@
+{
+  "changelogDate": "20220417214749",
+  "dto": "no",
+  "fields": [
+    {
+      "fieldName": "firstName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idNumber",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Teacher",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}
