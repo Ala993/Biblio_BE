@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.annotation.Nullable;
+
 /**
  * A Livre.
  */
@@ -37,6 +39,7 @@ public class Livre implements Serializable {
     @DBRef
     @JsonIgnoreProperties(value = "livre")
     @Field("emprunt")
+    @Nullable
     private Emprunt emprunt;
 
     public Boolean getBorrowed() {

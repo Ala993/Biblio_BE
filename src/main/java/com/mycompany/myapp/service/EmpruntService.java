@@ -2,12 +2,12 @@ package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.Emprunt;
 import com.mycompany.myapp.domain.Livre;
-import com.mycompany.myapp.domain.Student;
+import com.mycompany.myapp.domain.Loaner;
+import com.mycompany.myapp.enums.LoanerType;
 import com.mycompany.myapp.repository.EmpruntRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -31,10 +31,13 @@ public class EmpruntService {
 
     private final LivreService livreService;
 
-    public EmpruntService(EmpruntRepository empruntRepository, StudentService studentService, LivreService livreService) {
+    private final TeacherService teacherService;
+
+    public EmpruntService(EmpruntRepository empruntRepository, StudentService studentService, LivreService livreService, TeacherService teacherService) {
         this.empruntRepository = empruntRepository;
         this.studentService = studentService;
         this.livreService = livreService;
+        this.teacherService = teacherService;
     }
 
     /**
@@ -46,12 +49,15 @@ public class EmpruntService {
     public Emprunt save(Emprunt emprunt) {
         log.debug("Request to save Emprunt : {}", emprunt);
         Emprunt savedEmprunt = empruntRepository.save(emprunt);
-        Student student =  studentService.findOne(emprunt.getStudent().getId()).get();
-        List<Emprunt> empruntList = student.getEmprunts();
+        Loaner loaner =  studentService.findOne(emprunt.getLoaner().getId()).get();
+        List<Emprunt> empruntList = loaner.getEmprunts();
         if(empruntList == null) empruntList = new ArrayList<>();
         empruntList.add(savedEmprunt);
-        student.setEmprunts(empruntList);
-        studentService.save(student);
+        loaner.setEmprunts(empruntList);
+        if(loaner.getLoanerType().equals(LoanerType.STUDENT)){
+            studentService.save(loaner);
+        }
+        else teacherService.save(loaner);
         Livre livre = livreService.findOne(emprunt.getLivre().getId()).get();
         livre.setEmprunt(savedEmprunt);
         livre.setBorrowed(true);
@@ -113,10 +119,13 @@ public class EmpruntService {
     public void delete(String id) {
         log.debug("Request to delete Emprunt : {}", id);
         Emprunt emprunt = empruntRepository.findById(id).orElseThrow();
-        Student student = studentService.findOne(emprunt.getStudent().getId()).orElseThrow();
-        List<Emprunt> empruntList = student.getEmprunts();
-        student.setEmprunts(empruntList.stream().filter(emprunt1 -> !emprunt1.getId().equals(id) ).collect(Collectors.toList()));
-        studentService.save(student);
+        Loaner loaner = studentService.findOne(emprunt.getLoaner().getId()).orElseThrow();
+        List<Emprunt> empruntList = loaner.getEmprunts();
+        loaner.setEmprunts(empruntList.stream().filter(emprunt1 -> !emprunt1.getId().equals(id) ).collect(Collectors.toList()));
+        if(loaner.getLoanerType().equals(LoanerType.STUDENT)){
+            studentService.save(loaner);
+        }
+        else teacherService.save(loaner);
         Livre livre = livreService.findOne(emprunt.getLivre().getId()).orElseThrow();
         livre.setEmprunt(null);
         livre.isBorrowed(false);

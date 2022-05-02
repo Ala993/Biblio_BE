@@ -1,7 +1,10 @@
 package com.mycompany.myapp.service;
 
+import com.mycompany.myapp.domain.Loaner;
 import com.mycompany.myapp.domain.Teacher;
-import com.mycompany.myapp.repository.TeacherRepository;
+import com.mycompany.myapp.enums.LoanerType;
+import com.mycompany.myapp.repository.LoanerRepository;
+
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,52 +20,23 @@ public class TeacherService {
 
     private final Logger log = LoggerFactory.getLogger(TeacherService.class);
 
-    private final TeacherRepository teacherRepository;
 
-    public TeacherService(TeacherRepository teacherRepository) {
-        this.teacherRepository = teacherRepository;
+    private final LoanerRepository loanerRepository;
+
+    public TeacherService( LoanerRepository loanerRepository) {
+
+        this.loanerRepository = loanerRepository;
     }
 
-    /**
-     * Save a teacher.
-     *
-     * @param teacher the entity to save.
-     * @return the persisted entity.
-     */
-    public Teacher save(Teacher teacher) {
-        log.debug("Request to save Teacher : {}", teacher);
-        return teacherRepository.save(teacher);
+
+
+    public Loaner save(Loaner loaner) {
+        log.debug("Request to save loaner : {}", loaner);
+        loaner.setLoanerType(LoanerType.TEACHER);
+        return loanerRepository.save(loaner);
     }
 
-    /**
-     * Partially update a teacher.
-     *
-     * @param teacher the entity to update partially.
-     * @return the persisted entity.
-     */
-    public Optional<Teacher> partialUpdate(Teacher teacher) {
-        log.debug("Request to partially update Teacher : {}", teacher);
 
-        return teacherRepository
-            .findById(teacher.getId())
-            .map(existingTeacher -> {
-                if (teacher.getFirstName() != null) {
-                    existingTeacher.setFirstName(teacher.getFirstName());
-                }
-                if (teacher.getLastName() != null) {
-                    existingTeacher.setLastName(teacher.getLastName());
-                }
-                if (teacher.getEmail() != null) {
-                    existingTeacher.setEmail(teacher.getEmail());
-                }
-                if (teacher.getIdNumber() != null) {
-                    existingTeacher.setIdNumber(teacher.getIdNumber());
-                }
-
-                return existingTeacher;
-            })
-            .map(teacherRepository::save);
-    }
 
     /**
      * Get all the teachers.
@@ -70,9 +44,9 @@ public class TeacherService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    public Page<Teacher> findAll(Pageable pageable) {
+    public Page<Loaner> findAll(Pageable pageable) {
         log.debug("Request to get all Teachers");
-        return teacherRepository.findAll(pageable);
+        return loanerRepository.findAllByLoanerType(pageable, LoanerType.TEACHER);
     }
 
     /**
@@ -81,9 +55,9 @@ public class TeacherService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    public Optional<Teacher> findOne(String id) {
+    public Optional<Loaner> findOne(String id) {
         log.debug("Request to get Teacher : {}", id);
-        return teacherRepository.findById(id);
+        return loanerRepository.findById(id);
     }
 
     /**
@@ -93,6 +67,6 @@ public class TeacherService {
      */
     public void delete(String id) {
         log.debug("Request to delete Teacher : {}", id);
-        teacherRepository.deleteById(id);
+        loanerRepository.deleteById(id);
     }
 }

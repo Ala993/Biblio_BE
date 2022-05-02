@@ -1,6 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.domain.Student;
+
+import com.mycompany.myapp.domain.Loaner;
 import com.mycompany.myapp.repository.StudentRepository;
 import com.mycompany.myapp.service.StudentService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
@@ -54,12 +55,12 @@ public class StudentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/students")
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) throws URISyntaxException {
+    public ResponseEntity<Loaner> createStudent(@RequestBody Loaner student) throws URISyntaxException {
         log.debug("REST request to save Student : {}", student);
         if (student.getId() != null) {
             throw new BadRequestAlertException("A new student cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Student result = studentService.save(student);
+        Loaner result = studentService.save(student);
         return ResponseEntity
             .created(new URI("/api/students/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
@@ -77,9 +78,9 @@ public class StudentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/students/{id}")
-    public ResponseEntity<Student> updateStudent(
+    public ResponseEntity<Loaner> updateStudent(
         @PathVariable(value = "id", required = false) final String id,
-        @RequestBody Student student
+        @RequestBody Loaner student
     ) throws URISyntaxException {
         log.debug("REST request to update Student : {}, {}", id, student);
         if (student.getId() == null) {
@@ -93,47 +94,11 @@ public class StudentResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Student result = studentService.save(student);
+        Loaner result = studentService.save(student);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, student.getId()))
             .body(result);
-    }
-
-    /**
-     * {@code PATCH  /students/:id} : Partial updates given fields of an existing student, field will ignore if it is null
-     *
-     * @param id the id of the student to save.
-     * @param student the student to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated student,
-     * or with status {@code 400 (Bad Request)} if the student is not valid,
-     * or with status {@code 404 (Not Found)} if the student is not found,
-     * or with status {@code 500 (Internal Server Error)} if the student couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/students/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Student> partialUpdateStudent(
-        @PathVariable(value = "id", required = false) final String id,
-        @RequestBody Student student
-    ) throws URISyntaxException {
-        log.debug("REST request to partial update Student partially : {}, {}", id, student);
-        if (student.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, student.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!studentRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        Optional<Student> result = studentService.partialUpdate(student);
-
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, student.getId())
-        );
     }
 
     /**
@@ -143,9 +108,9 @@ public class StudentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of students in body.
      */
     @GetMapping("/students")
-    public ResponseEntity<List<Student>> getAllStudents(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<Loaner>> getAllStudents(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Students");
-        Page<Student> page = studentService.findAll(pageable);
+        Page<Loaner> page = studentService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -157,9 +122,9 @@ public class StudentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the student, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/students/{id}")
-    public ResponseEntity<Student> getStudent(@PathVariable String id) {
+    public ResponseEntity<Loaner> getStudent(@PathVariable String id) {
         log.debug("REST request to get Student : {}", id);
-        Optional<Student> student = studentService.findOne(id);
+        Optional<Loaner> student = studentService.findOne(id);
         return ResponseUtil.wrapOrNotFound(student);
     }
 

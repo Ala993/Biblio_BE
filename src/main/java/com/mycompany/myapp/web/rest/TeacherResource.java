@@ -1,5 +1,6 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.Loaner;
 import com.mycompany.myapp.domain.Teacher;
 import com.mycompany.myapp.repository.TeacherRepository;
 import com.mycompany.myapp.service.TeacherService;
@@ -54,12 +55,12 @@ public class TeacherResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/teachers")
-    public ResponseEntity<Teacher> createTeacher(@RequestBody Teacher teacher) throws URISyntaxException {
+    public ResponseEntity<Loaner> createTeacher(@RequestBody Loaner teacher) throws URISyntaxException {
         log.debug("REST request to save Teacher : {}", teacher);
         if (teacher.getId() != null) {
             throw new BadRequestAlertException("A new teacher cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Teacher result = teacherService.save(teacher);
+        Loaner result = teacherService.save(teacher);
         return ResponseEntity
             .created(new URI("/api/teachers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
@@ -77,9 +78,9 @@ public class TeacherResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/teachers/{id}")
-    public ResponseEntity<Teacher> updateTeacher(
+    public ResponseEntity<Loaner> updateTeacher(
         @PathVariable(value = "id", required = false) final String id,
-        @RequestBody Teacher teacher
+        @RequestBody Loaner teacher
     ) throws URISyntaxException {
         log.debug("REST request to update Teacher : {}, {}", id, teacher);
         if (teacher.getId() == null) {
@@ -93,47 +94,11 @@ public class TeacherResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Teacher result = teacherService.save(teacher);
+        Loaner result = teacherService.save(teacher);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, teacher.getId()))
             .body(result);
-    }
-
-    /**
-     * {@code PATCH  /teachers/:id} : Partial updates given fields of an existing teacher, field will ignore if it is null
-     *
-     * @param id the id of the teacher to save.
-     * @param teacher the teacher to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated teacher,
-     * or with status {@code 400 (Bad Request)} if the teacher is not valid,
-     * or with status {@code 404 (Not Found)} if the teacher is not found,
-     * or with status {@code 500 (Internal Server Error)} if the teacher couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/teachers/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Teacher> partialUpdateTeacher(
-        @PathVariable(value = "id", required = false) final String id,
-        @RequestBody Teacher teacher
-    ) throws URISyntaxException {
-        log.debug("REST request to partial update Teacher partially : {}, {}", id, teacher);
-        if (teacher.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, teacher.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!teacherRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        Optional<Teacher> result = teacherService.partialUpdate(teacher);
-
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, teacher.getId())
-        );
     }
 
     /**
@@ -143,9 +108,9 @@ public class TeacherResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of teachers in body.
      */
     @GetMapping("/teachers")
-    public ResponseEntity<List<Teacher>> getAllTeachers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<Loaner>> getAllTeachers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Teachers");
-        Page<Teacher> page = teacherService.findAll(pageable);
+        Page<Loaner> page = teacherService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -157,9 +122,9 @@ public class TeacherResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the teacher, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/teachers/{id}")
-    public ResponseEntity<Teacher> getTeacher(@PathVariable String id) {
+    public ResponseEntity<Loaner> getTeacher(@PathVariable String id) {
         log.debug("REST request to get Teacher : {}", id);
-        Optional<Teacher> teacher = teacherService.findOne(id);
+        Optional<Loaner> teacher = teacherService.findOne(id);
         return ResponseUtil.wrapOrNotFound(teacher);
     }
 

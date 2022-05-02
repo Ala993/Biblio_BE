@@ -1,18 +1,19 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.io.Serializable;
-import java.time.Instant;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.io.Serializable;
+import java.time.Instant;
+
 /**
  * A Emprunt.
  */
 @Document(collection = "emprunt")
-public class Emprunt implements Serializable {
+public class    Emprunt implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,8 +27,8 @@ public class Emprunt implements Serializable {
     private Instant end;
 
     @DBRef
-    @Field("student")
-    private Student student;
+    @Field("loaner")
+    private Loaner loaner;
 
     @DBRef
     @Field("livre")
@@ -75,17 +76,12 @@ public class Emprunt implements Serializable {
         this.end = end;
     }
 
-    public Student getStudent() {
-        return this.student;
+    public Loaner getLoaner() {
+        return loaner;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public Emprunt student(Student student) {
-        this.setStudent(student);
-        return this;
+    public void setLoaner(Loaner loaner) {
+        this.loaner = loaner;
     }
 
     public Livre getLivre() {
