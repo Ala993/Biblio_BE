@@ -1,7 +1,6 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.Loaner;
-import com.mycompany.myapp.domain.Teacher;
 import com.mycompany.myapp.enums.LoanerType;
 import com.mycompany.myapp.repository.LoanerRepository;
 
@@ -12,9 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-/**
- * Service Implementation for managing {@link Teacher}.
- */
+
 @Service
 public class TeacherService {
 

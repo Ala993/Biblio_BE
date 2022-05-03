@@ -1,10 +1,9 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.Loaner;
-import com.mycompany.myapp.domain.Student;
 import com.mycompany.myapp.enums.LoanerType;
 import com.mycompany.myapp.repository.LoanerRepository;
-import com.mycompany.myapp.repository.StudentRepository;
+
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

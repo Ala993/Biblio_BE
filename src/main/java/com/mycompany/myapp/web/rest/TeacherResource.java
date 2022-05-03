@@ -1,8 +1,6 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Loaner;
-import com.mycompany.myapp.domain.Teacher;
-import com.mycompany.myapp.repository.TeacherRepository;
 import com.mycompany.myapp.service.TeacherService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -16,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,9 +21,7 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
-/**
- * REST controller for managing {@link com.mycompany.myapp.domain.Teacher}.
- */
+
 @RestController
 @RequestMapping("/api")
 public class TeacherResource {
@@ -40,11 +35,9 @@ public class TeacherResource {
 
     private final TeacherService teacherService;
 
-    private final TeacherRepository teacherRepository;
 
-    public TeacherResource(TeacherService teacherService, TeacherRepository teacherRepository) {
+    public TeacherResource(TeacherService teacherService) {
         this.teacherService = teacherService;
-        this.teacherRepository = teacherRepository;
     }
 
     /**
@@ -90,9 +83,6 @@ public class TeacherResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!teacherRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
 
         Loaner result = teacherService.save(teacher);
         return ResponseEntity

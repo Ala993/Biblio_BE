@@ -2,7 +2,6 @@ package com.mycompany.myapp.web.rest;
 
 
 import com.mycompany.myapp.domain.Loaner;
-import com.mycompany.myapp.repository.StudentRepository;
 import com.mycompany.myapp.service.StudentService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -40,11 +38,9 @@ public class StudentResource {
 
     private final StudentService studentService;
 
-    private final StudentRepository studentRepository;
 
-    public StudentResource(StudentService studentService, StudentRepository studentRepository) {
+    public StudentResource(StudentService studentService) {
         this.studentService = studentService;
-        this.studentRepository = studentRepository;
     }
 
     /**
@@ -88,10 +84,6 @@ public class StudentResource {
         }
         if (!Objects.equals(id, student.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!studentRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
         Loaner result = studentService.save(student);

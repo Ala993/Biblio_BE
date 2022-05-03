@@ -28,6 +28,7 @@ public class    Emprunt implements Serializable {
 
     @DBRef
     @Field("loaner")
+    @JsonIgnoreProperties(value = "emprunts")
     private Loaner loaner;
 
     @DBRef
