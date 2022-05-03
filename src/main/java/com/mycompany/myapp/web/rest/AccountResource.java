@@ -86,9 +86,13 @@ public class AccountResource {
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
-    public String isAuthenticated(HttpServletRequest request) {
+    public boolean isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
-        return request.getRemoteUser();
+        if(request.getRemoteUser() != null){
+            return true;
+        }
+        else return false;
+       // return request.getRemoteUser();
     }
 
     /**
